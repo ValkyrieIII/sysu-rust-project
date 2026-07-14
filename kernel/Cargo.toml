@@ -1,0 +1,11 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bootloader_api = "0.11"
+x86_64 = "0.14"
+spin = "0.9"
+lazy_static = { version = "1.4", features = ["spin_no_std"] }
+heapless = "0.8"
