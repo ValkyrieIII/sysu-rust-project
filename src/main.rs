@@ -1,14 +1,12 @@
 fn main() {
+    let _ = dotenvy::dotenv(); // 加载 .env 文件（不存在则忽略）
     let bios_path = env!("BIOS_IMAGE");
 
-    // QEMU paths on Windows
-    let qemu = if cfg!(windows) {
-        r"C:\Program Files\qemu\qemu-system-x86_64.exe"
-    } else {
-        "qemu-system-x86_64"
-    };
+    // Use QEMU_PATH env var if set, otherwise fall back to system PATH
+    let qemu = std::env::var("QEMU_PATH")
+        .unwrap_or_else(|_| "qemu-system-x86_64".to_string());
 
-    let mut cmd = std::process::Command::new(qemu);
+    let mut cmd = std::process::Command::new(&qemu);
     cmd.arg("-drive")
         .arg(format!("format=raw,file={bios_path}"))
         .arg("-serial")

@@ -7,7 +7,7 @@
 ### 环境要求
 
 - Rust nightly（项目锁定 `nightly-2026-05-01`，见 `rust-toolchain.toml`）
-- QEMU（`C:\Program Files\qemu\qemu-system-x86_64.exe`）
+- QEMU — 通过项目根目录的 `.env` 文件配置路径，或从 `PATH` 查找
 - `bindeps` 功能（已在 `.cargo/config.toml` 中启用）
 
 初次使用需安装工具链和组件：
@@ -41,6 +41,7 @@ os/
 ├── Cargo.toml              # workspace root（artifact 依赖 kernel）
 ├── rust-toolchain.toml     # 锁定 nightly-2026-05-01
 ├── .cargo/config.toml      # 启用 bindeps
+├── .env                    # QEMU 路径配置（通过 dotenvy 自动加载）
 ├── build.rs                # bootloader 生成 BIOS/UEFI 磁盘镜像
 ├── src/main.rs             # QEMU 启动器
 ├── run.ps1                 # PowerShell 一键构建+运行
@@ -134,7 +135,7 @@ All S3-FIFO tests passed.
 | 编译器   | Rust nightly-2026-05-01 (`x86_64-unknown-none`)                                     |
 | 模拟器   | QEMU 11.0 (x86_64, BIOS)                                                            |
 | 启动方式 | bootloader crate v0.11                                                              |
-| 核心依赖 | `x86_64 0.14`, `bootloader_api 0.11`, `heapless 0.8`, `spin 0.9`, `lazy_static 1.4` |
+| 核心依赖 | `x86_64 0.14`, `bootloader_api 0.11`, `heapless 0.8`, `spin 0.9`, `lazy_static 1.4`, `dotenvy 0.15` |
 
 ## 常见问题
 
@@ -146,6 +147,10 @@ All S3-FIFO tests passed.
 
 - Git Bash 中运行时终端即显示串口输出
 - PowerShell 中如果输出不可见，将 `src/main.rs` 中的 `-serial stdio` 替换为 `-nographic`
+
+### QEMU 不在默认路径
+
+编辑项目根目录的 `.env` 文件，修改 `QEMU_PATH` 为实际安装路径即可。`.env` 由 `dotenvy` 自动加载，无需手动设置环境变量。
 
 
 ## 参考
